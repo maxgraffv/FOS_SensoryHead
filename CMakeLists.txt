@@ -4,8 +4,11 @@ project(FOS_HEAD LANGUAGES CXX C)
 set(CMAKE_C_STANDARD C17)
 
 
-add_library()
+add_subdirectory(modules/StereoCamera)
 
 
-
-add_executable(../core/)
+add_executable(fos_head core/core.cpp)
+target_link_libraries(fos_head 
+    PUBLIC
+    PkgConfig::LIBCAMERA
+)
