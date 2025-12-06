@@ -1,11 +1,11 @@
-#include "Camera.h"
+#include "SingleCamera.h"
 
-Camera::Camera()
+SingleCamera::SingleCamera()
 {
 
 }
 
-void Camera::requestComplete(libcamera::Request *request)
+void SingleCamera::requestComplete(libcamera::Request *request)
 {
     if (request->status() == libcamera::Request::RequestCancelled)
         return ;
@@ -71,12 +71,12 @@ void Camera::requestComplete(libcamera::Request *request)
         std::cerr << "Failed to queue request: " << ret << std::endl;
 }
 
-void Camera::init(std::shared_ptr<libcamera::Camera> libcam)
+void SingleCamera::init(std::shared_ptr<libcamera::Camera> libcam)
 {
     this->libcam = libcam;
 }
 
-void Camera::acquire()
+void SingleCamera::acquire()
 {
     int ret = this->libcam->acquire();
     if (ret < 0) {
@@ -86,7 +86,7 @@ void Camera::acquire()
 }
 
 
-void Camera::config()
+void SingleCamera::config()
 {
     this->configuration = this->libcam->generateConfiguration( {libcamera::StreamRole::VideoRecording} );
     this->streamConfig = &configuration->at(0);
@@ -111,7 +111,7 @@ void Camera::config()
 }
 
 
-void Camera::allocateBuffers()
+void SingleCamera::allocateBuffers()
 {
     this->allocator = new libcamera::FrameBufferAllocator(this->libcam);
 
@@ -128,7 +128,7 @@ void Camera::allocateBuffers()
 }
 
 
-void Camera::start()
+void SingleCamera::start()
 {
     this->stream = this->streamConfig->stream();
 
@@ -150,7 +150,7 @@ void Camera::start()
         requests.push_back(std::move(req));
     }
 
-    this->libcam->requestCompleted.connect(this, &Camera::requestComplete);
+    this->libcam->requestCompleted.connect(this, &SingleCamera::requestComplete);
 
     this->libcam->start();
     for (std::unique_ptr<libcamera::Request> &req : requests) {
@@ -166,7 +166,7 @@ void Camera::start()
 }
 
 
-void Camera::stop()
+void SingleCamera::stop()
 {
     this->libcam->stop();
     this->allocator->free(this->stream);

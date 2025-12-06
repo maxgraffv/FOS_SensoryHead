@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef SINGLE_CAMERA_H
+#define SINGLE_CAMERA_H
 
 #include <libcamera/libcamera.h>
 #include <iostream>
@@ -15,7 +15,7 @@
 
 #include "CaptureMode.h"
 
-class Camera
+class SingleCamera
 {
     private:
         std::shared_ptr<libcamera::Camera> libcam;
@@ -35,7 +35,7 @@ class Camera
 
 
     public:
-        Camera();
+        SingleCamera();
         void requestComplete(libcamera::Request *request);
         void init(std::shared_ptr<libcamera::Camera> libcam);
         void acquire();

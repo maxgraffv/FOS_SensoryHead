@@ -1,6 +1,9 @@
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBCAMERA REQUIRED libcamera)
+
 add_library(CameraStereo
     CameraStereo.cpp
-    Camera.cpp
+    SingleCamera.cpp
 ) 
 
 target_include_directories(CameraStereo
@@ -9,12 +12,15 @@ target_include_directories(CameraStereo
         ${LIBCAMERA_INCLUDE_DIRS}
 )
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBCAMERA REQUIRED IMPORTED_TARGET)
 
 target_link_libraries(CameraStereo
     PUBLIC
-        PkgConfig::LIBCAMERA
+        ${LIBCAMERA_LIBRARIES}
+)
+
+target_compile_options(CameraStereo
+    PUBLIC
+        ${LIBCAMERA_CFLAGS_OTHER}
 )
 
 target_compile_features(CameraStereo PUBLIC cxx_std_17)
