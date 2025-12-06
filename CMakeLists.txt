@@ -4,7 +4,7 @@ project(FOS_HEAD LANGUAGES CXX C)
 set(CMAKE_C_STANDARD C17)
 
 
-add_subdirectory(modules/StereoCamera)
+add_subdirectory(modules/CameraStereo)
 
 
 add_executable(fos_head core/core.cpp)
