@@ -8,7 +8,7 @@ class CameraStereo
 {
     private:
     std::shared_ptr<Camera> camLeft = std::make_shared<Camera>();
-    std::shared_ptr<Camera> camRight = std::make_unique<Camera>();
+    std::shared_ptr<Camera> camRight = std::make_shared<Camera>();
     std::string camLeftId, camRightId;
     std::unique_ptr<libcamera::CameraManager> cameraManager = std::make_unique<libcamera::CameraManager>();
     CaptureMode capMode;

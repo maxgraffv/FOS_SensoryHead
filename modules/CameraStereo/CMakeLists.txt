@@ -3,17 +3,18 @@ add_library(CameraStereo
     Camera.cpp
 ) 
 
-target_include_directories(StereoCamera
+target_include_directories(CameraStereo
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${LIBCAMERA_INCLUDE_DIRS}
 )
 
-find_package((PkgConfig REQUIRED))
-pkg_check_modules(LIBCAMERA REQUIRED IMPORTED_TARGET libcamera)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBCAMERA REQUIRED IMPORTED_TARGET)
 
-target_link_libraries(StereoCamera
+target_link_libraries(CameraStereo
     PUBLIC
         PkgConfig::LIBCAMERA
 )
 
-target_compile_features(StereoCamera PUBLIC cxx_std_17)
+target_compile_features(CameraStereo PUBLIC cxx_std_17)

@@ -19,11 +19,11 @@ class Camera
 {
     private:
         std::shared_ptr<libcamera::Camera> libcam;
-        std::unique_ptr<libcamera::CameraConfiguration> configuration;
-        libcamera::StreamConfiguration &streamConfig;
-        libcamera::FrameBufferAllocator *allocator;
-        libcamera::Stream *stream;
-        std::vector<std::unique_ptr<libcamera::FrameBuffer>> &buffers;
+        std::unique_ptr<libcamera::CameraConfiguration> configuration = nullptr;
+        libcamera::StreamConfiguration *streamConfig = nullptr;
+        libcamera::FrameBufferAllocator *allocator = nullptr;
+        libcamera::Stream *stream = nullptr;
+        const std::vector<std::unique_ptr<libcamera::FrameBuffer>> *buffers = nullptr;
         std::vector<std::unique_ptr<libcamera::Request>> requests;
 
         std::mutex mtx;
@@ -35,6 +35,7 @@ class Camera
 
 
     public:
+        Camera();
         void requestComplete(libcamera::Request *request);
         void init(std::shared_ptr<libcamera::Camera> libcam);
         void acquire();

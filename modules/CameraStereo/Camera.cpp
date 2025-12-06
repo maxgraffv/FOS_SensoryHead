@@ -1,5 +1,10 @@
 #include "Camera.h"
 
+Camera::Camera()
+{
+
+}
+
 void Camera::requestComplete(libcamera::Request *request)
 {
     if (request->status() == libcamera::Request::RequestCancelled)
@@ -84,23 +89,23 @@ void Camera::acquire()
 void Camera::config()
 {
     this->configuration = this->libcam->generateConfiguration( {libcamera::StreamRole::VideoRecording} );
-    this->streamConfig = configuration->at(0);
+    this->streamConfig = &configuration->at(0);
 
-    streamConfig.size.width = 1920;
-    streamConfig.size.height = 1080;
+    streamConfig->size.width = 1920;
+    streamConfig->size.height = 1080;
 
-    streamConfig.pixelFormat = libcamera::formats::YUV420;
+    streamConfig->pixelFormat = libcamera::formats::YUV420;
     /*
 		[  Y plane (W*H bajtów)  ]
 		[ U plane (W*H/4 bajtów) ]
 		[ V plane (W*H/4 bajtów) ]
 	*/
 
-    std::cout << "Default viewfinder configuration is: " << streamConfig.toString() << std::endl;
-    std::cout << "Pixel format: " << streamConfig.pixelFormat.toString() << std::endl;
+    std::cout << "Default viewfinder configuration is: " << streamConfig->toString() << std::endl;
+    std::cout << "Pixel format: " << streamConfig->pixelFormat.toString() << std::endl;
 
     this->configuration->validate();
-    std::cout << "Validated viewfinder configuration is: " << streamConfig.toString() << std::endl;
+    std::cout << "Validated viewfinder configuration is: " << streamConfig->toString() << std::endl;
 
     this->libcam->configure(configuration.get());
 }
@@ -125,18 +130,18 @@ void Camera::allocateBuffers()
 
 void Camera::start()
 {
-    this->stream = this->streamConfig.stream();
+    this->stream = this->streamConfig->stream();
 
-    this->buffers = this->allocator->buffers(this->stream);
+    this->buffers = &this->allocator->buffers(this->stream);
     
-    for (unsigned int i = 0; i < buffers.size(); i++) {
+    for (unsigned int i = 0; i < buffers->size(); i++) {
         std::unique_ptr<libcamera::Request> req = this->libcam->createRequest();
         if (!req) {
             std::cerr << "Can't create a request" << std::endl;
             return ;
         }
 
-        const std::unique_ptr<libcamera::FrameBuffer> &buffer = buffers[i];
+        const std::unique_ptr<libcamera::FrameBuffer> &buffer = buffers->at(i);
         int ret = req->addBuffer(stream, buffer.get());
         if (!req) {
             std::cerr << "Can't set buffer for request" << std::endl;
