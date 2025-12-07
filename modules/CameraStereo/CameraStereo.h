@@ -15,18 +15,18 @@ class CameraStereo
 
     void config();
     void allocateBuffers();
-    void start();
-    void stop();
 
     
     public:
     CameraStereo();
     void init();
+    void start();
+    void stop();
     void setCaptureMode(CaptureMode mode);
     void snap();
 
-
-
+    std::shared_ptr<SingleCamera> getCamLeft();
+    std::shared_ptr<SingleCamera> getCamRight();
 
 };
 

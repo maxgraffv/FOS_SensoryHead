@@ -71,3 +71,15 @@ void CameraStereo::stop()
     camRight->stop();
     this->cameraManager->stop();
 }
+
+
+std::shared_ptr<SingleCamera> CameraStereo::getCamLeft()
+{
+    return camLeft;
+}
+
+
+std::shared_ptr<SingleCamera> CameraStereo::getCamRight()
+{
+    return camRight;
+}
