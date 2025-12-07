@@ -88,6 +88,6 @@ void send(void* mem, int len)
     ssize_t n = recv(sockfd, buffer_ptr, (sizeof(uint8_t)*buffer_size) - 1, 0);
     if (n >= 0) {
         buffer_ptr[n] = '\0';
-        printf("Klient: odpowiedź serwera: %d\n", *buffer_ptr);
+        printf("Klient: odpowiedź serwera: %s\n", *buffer_ptr);
     }
 }
