@@ -49,11 +49,12 @@ int main(int argv, char** argc)
     stereoCam->init();
     stereoCam->start();
 
-    for(int i = 0; i < 1000; i++)
+    for(int i = 0; i < 1; i++)
     {
         take_and_send(stereoCam);
     }
     
+    stereoCam->stop();
     free(buffer_ptr);
     return 0;
 }
