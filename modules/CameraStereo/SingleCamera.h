@@ -25,6 +25,7 @@ class SingleCamera
         libcamera::Stream *stream = nullptr;
         const std::vector<std::unique_ptr<libcamera::FrameBuffer>> *buffers = nullptr;
         std::vector<std::unique_ptr<libcamera::Request>> requests;
+        void *frameMemory = nullptr;
 
         std::mutex mtx;
         std::condition_variable cv;

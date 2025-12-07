@@ -22,8 +22,8 @@ void SingleCamera::requestComplete(libcamera::Request *request)
         const libcamera::FrameBuffer::Plane &plane = buffer->planes()[0];
         const libcamera::FrameMetadata::Plane &planeMeta = metaPlanes[0];
 
-        void *memory = mmap(NULL, plane.length, PROT_READ, MAP_SHARED, plane.fd.get(), 0);
-        if (memory == MAP_FAILED)
+        this->frameMemory = mmap(NULL, plane.length, PROT_READ, MAP_SHARED, plane.fd.get(), 0);
+        if (frameMemory == MAP_FAILED)
         {
             std::cerr << "mmap() failed" << std::endl;
             continue;
@@ -54,7 +54,7 @@ void SingleCamera::requestComplete(libcamera::Request *request)
 
         // modify(frame)
         // send(frame)
-        munmap(memory, plane.length);
+        munmap(frameMemory,plane.length);
     }
 
     int remaining = --framesToGrab;
