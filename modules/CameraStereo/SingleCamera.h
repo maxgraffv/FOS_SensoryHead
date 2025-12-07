@@ -33,6 +33,8 @@ class SingleCamera
         std::string id;    
         CaptureMode capMode;
 
+        int frameSize{0};
+
     public:
         void *frameMemory = nullptr;
 
@@ -47,6 +49,8 @@ class SingleCamera
         void stop();
         
         void snap();
+
+        int getFrameSize();
 
 
 };

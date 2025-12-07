@@ -22,6 +22,7 @@ void SingleCamera::requestComplete(libcamera::Request *request)
         const libcamera::FrameBuffer::Plane &plane = buffer->planes()[0];
         const libcamera::FrameMetadata::Plane &planeMeta = metaPlanes[0];
 
+        this->frameSize = plane.length;
         this->frameMemory = mmap(NULL, plane.length, PROT_READ, MAP_SHARED, plane.fd.get(), 0);
         if (frameMemory == MAP_FAILED)
         {
@@ -173,4 +174,10 @@ void SingleCamera::stop()
     delete this->allocator;
     this->libcam->release();
     this->libcam.reset();
+}
+
+
+int SingleCamera::getFrameSize()
+{
+    return this->frameSize;
 }
