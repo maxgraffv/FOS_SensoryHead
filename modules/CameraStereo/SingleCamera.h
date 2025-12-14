@@ -28,15 +28,18 @@ class SingleCamera
 
         std::mutex mtx;
         std::condition_variable cv;
-        std::atomic<int> framesToGrab{100};
+        int framesToGrab{100};
 
         std::string id;    
         CaptureMode capMode;
+        std::vector<void*> mappedPlanes;
+
 
         int frameSize{0};
 
     public:
         void *frameMemory = nullptr;
+        std::vector<uint8_t> fullFrame;
 
     public:
         SingleCamera();

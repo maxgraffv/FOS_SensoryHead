@@ -6,7 +6,7 @@
 #include <string.h>
 
 void take_and_send(CameraStereo*);
-void send(void* mem, int len);
+void send(std::vector<uint8_t>&);
 
 int sockfd;
 struct sockaddr_in server_addr;
@@ -78,7 +78,7 @@ void take_and_send(CameraStereo *cam)
     buffer_size = leftSize;
     buffer_ptr = (uint8_t*)malloc(sizeof(uint8_t)*leftSize);
 
-    send(left, leftSize);
+    // send(left, leftSize);
 
 }
 

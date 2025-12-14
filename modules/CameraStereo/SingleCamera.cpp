@@ -1,4 +1,5 @@
 #include "SingleCamera.h"
+#include <cstring>
 
 SingleCamera::SingleCamera()
 {
@@ -19,17 +20,40 @@ void SingleCamera::requestComplete(libcamera::Request *request)
         std::cout << metadata.sequence << std::endl;
         const auto &metaPlanes = metadata.planes();
 
+        const std::vector<libcamera::FrameBuffer::Plane> &planes = buffer->planes();
         const libcamera::FrameBuffer::Plane &plane = buffer->planes()[0];
         const libcamera::FrameMetadata::Plane &planeMeta = metaPlanes[0];
 
-        this->frameSize = plane.length;
-        this->frameMemory = mmap(NULL, plane.length, PROT_READ, MAP_SHARED, plane.fd.get(), 0);
-        if (frameMemory == MAP_FAILED)
+        this->frameSize = 0;
+        this->mappedPlanes.clear();
+        this->mappedPlanes.reserve(planes.size());
+
+        for(auto &plane : planes)
         {
-            std::cerr << "mmap() failed" << std::endl;
-            continue;
+            void *mem = mmap(NULL, plane.length, PROT_READ, MAP_SHARED, plane.fd.get(), plane.offset);
+            if (frameMemory == MAP_FAILED)
+            {
+                std::cerr << "mmap() failed" << std::endl;
+                continue;
+            }
+
+            this->mappedPlanes.push_back(mem);
+            this->frameSize += plane.length;
         }
 
+        fullFrame = std::vector<uint8_t>(this->frameSize);
+        size_t offset = 0;
+
+        for(size_t i = 0; i < planes.size(); i++)
+        {
+            const auto &plane = planes[i];
+            std::memcpy(fullFrame.data() + offset, this->mappedPlanes[i], plane.length);
+            offset += plane.length;
+        }
+        
+
+        std::cout << "FullFrame size: " << sizeof(fullFrame) << std::endl;
+        
 
 		/*
 		struct FrameView
