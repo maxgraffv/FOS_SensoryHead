@@ -52,7 +52,7 @@ void SingleCamera::requestComplete(libcamera::Request *request)
         }
         
 
-        std::cout << "FullFrame size: " << sizeof(fullFrame) << std::endl;
+        std::cout << "FullFrame size: " << fullFrame.size() << std::endl;
         
 
 		/*
@@ -79,7 +79,7 @@ void SingleCamera::requestComplete(libcamera::Request *request)
 
         // modify(frame)
         // send(frame)
-        munmap(frameMemory,plane.length);
+        munmap(frameMemory, fullFrame.size());
     }
 
     int remaining = --framesToGrab;
